@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>trac_ik_examples</name>
+  <version>0.1.0</version>
+  <description> This package contains the source code for testing and comparing trac_ik</description>
+  <maintainer email="aprotyas@u.rochester.edu">Abrar Rahman Protyasha</maintainer>
+  <author>Patrick Beeson</author>
+  <license>BSD</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <build_depend>libnlopt-cxx-dev</build_depend>
+  <build_depend>orocos_kdl</build_depend>
+  <build_depend>rclcpp</build_depend>
+  <build_depend>trac_ik_lib</build_depend>
+
+  <exec_depend>libnlopt0</exec_depend>
+  <exec_depend>libnlopt-cxx-dev</exec_depend>
+  <exec_depend>orocos_kdl</exec_depend>
+  <exec_depend>rclcpp</exec_depend>
+  <exec_depend>trac_ik_lib</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>trac_ik</name>
+  <version>0.2.0</version>
+  <description>
+    The ROS packages in this repository have been forked from TRACLABS' source
+    tree, to provide - in ROS 2 - an improved alternative Inverse Kinematics
+    solver to the popular inverse Jacobian methods in KDL
+  </description>
+  <maintainer email="anton.weiss@th-deg.de">Anton Weiss</maintainer>
+  <author>Patrick Beeson</author>
+  <author>Barrett Ames</author>
+  <license>BSD</license>
+
+  <url type="repository">https://github.com/aprotyas/trac_ik</url>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>trac_ik_examples</exec_depend>
+  <exec_depend>trac_ik_kinematics</exec_depend>
+  <exec_depend>trac_ik_lib</exec_depend>
+  <exec_depend>trac_ik_python</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
