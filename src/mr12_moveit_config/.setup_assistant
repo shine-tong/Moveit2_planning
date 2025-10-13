@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: mr12urdf20240605
+    relative_path: urdf/mr12urdf20240605.urdf
+  srdf:
+    relative_path: config/mr12urdf20240605.srdf
+  package_settings:
+    author_name: try
+    author_email: try@123.com
+    generated_timestamp: 1741155750
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
