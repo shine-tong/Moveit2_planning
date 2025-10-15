@@ -19,6 +19,9 @@ src/
 │   ├── scripts/             # Python脚本
 │   │   ├── moveit_control.py
 │   │   └── pointcloud_publisher.py
+│   ├── utils/             # 工具目录
+│   │   ├── __init__.py
+│   │   └── redis_param.py
 │   └── package.xml
 ├── mr12_moveit_config/      # MoveIt配置包
 │   ├── config/              # MoveIt配置文件
@@ -132,6 +135,7 @@ src/
 - `warehouse_ros_mongo`: 运动规划数据库存储
 - `rclpy`: ROS 2 Python客户端库
 - `rclcpp`: ROS 2 C++客户端库
+- `redis`: redis通信
 
 ## 安装与使用
 
@@ -165,10 +169,17 @@ sudo apt install ros-Jazzy-joint-state-publisher-gui \
 
 4. **安装Python依赖**
 ```bash
-pip3 install open3d numpy scipy
+pip3 install open3d redis
 ```
 
-5. **构建工作空间**
+5. **配置redis**
+```bash
+sudo apt install redis-server
+sudo systemctl enable redis-server
+sudo systemctl start redis-server
+```
+
+6. **构建工作空间**
 ```bash
 cd ~/your_workspace
 colcon build
