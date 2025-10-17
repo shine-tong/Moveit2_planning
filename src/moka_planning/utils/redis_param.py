@@ -1,74 +1,128 @@
-# /home/tong/colcon_ws/src/moka_planning/utils/global_param.py
+# /home/tong/colcon_ws/src/moka_planning/utils/redis_param.py
 """
-全局参数共享模块 (基于 Redis)
-允许不同 Python 文件 / ROS2 节点 共享参数。
-
-使用示例:
-    from moka_planning.utils.global_param import set_param, get_param
-
-    set_param('robot_speed', 1.5)
-    print(get_param('robot_speed'))
+RedisParam — 全局参数共享模块 (基于 Redis)
+-----------------------------------------
+特性:
+- 支持直接通过类方法调用，无需实例化
+- 自动初始化连接（仅一次）
+- 自动检测 Redis 连接状态并重连
+- 支持多线程安全访问
+- 适用于多节点全局参数共享
 """
 
 import redis
 import json
 import threading
-
-class rds:
-    def __init__(self):
-        # 默认 Redis 连接配置（可根据需要修改）
-        REDIS_HOST = 'localhost'
-        REDIS_PORT = 6379
-        REDIS_DB = 0
-
-        # 初始化连接池
-        _pool = redis.ConnectionPool(
-            host=REDIS_HOST,
-            port=REDIS_PORT,
-            db=REDIS_DB,
-            decode_responses=True  # 让返回值自动解码为 str
-        )
-        _r = redis.Redis(connection_pool=_pool)
-        _lock = threading.Lock()
+import time
 
 
-    def set_param(self, key: str, value):
+class RedisParam:
+    _r = None
+    _lock = threading.Lock()
+    _initialized = False
+
+    # Redis 连接配置
+    _REDIS_HOST = 'localhost'
+    _REDIS_PORT = 6379
+    _REDIS_DB = 0
+
+    @classmethod
+    def _init_connection(cls, force_reconnect=False):
         """
-        设置全局参数（自动 JSON 序列化）
+        初始化或重连 Redis。
+        - force_reconnect=True 时强制重新连接
         """
-        with _lock:
+        if cls._initialized and not force_reconnect:
+            return
+
+        max_retries = 5
+        for attempt in range(1, max_retries + 1):
             try:
-                _r.set(key, json.dumps(value))
+                pool = redis.ConnectionPool(
+                    host=cls._REDIS_HOST,
+                    port=cls._REDIS_PORT,
+                    db=cls._REDIS_DB,
+                    decode_responses=True
+                )
+                cls._r = redis.Redis(connection_pool=pool)
+                cls._r.ping()  # 测试连接
+                cls._initialized = True
+                print(f"Redis 已成功连接: (host={cls._REDIS_HOST}, port={cls._REDIS_PORT}, db={cls._REDIS_DB})")
+                return
             except Exception as e:
-                print(f"[global_param] 设置参数失败: {e}")
+                print(f"Redis 连接失败{e}, 正在尝试重新连接...")
+                if attempt < max_retries:
+                    time.sleep(1)
+                else:
+                    print("无法连接 Redis, 检查 Redis 服务是否开启!")
+                    cls._r = None
+                    cls._initialized = False
 
-    def get_param(self, key: str, default=None):
-        """
-        获取全局参数（自动反序列化为 Python 类型）
-        """
+    @classmethod
+    def _ensure_connection(cls):
+        """确保连接可用，若断开则自动重连"""
+        if not cls._initialized or cls._r is None:
+            cls._init_connection(force_reconnect=True)
+        else:
+            try:
+                cls._r.ping()
+            except redis.ConnectionError:
+                print("Redis 连接中断, 正尝试重新连接...")
+                cls._init_connection(force_reconnect=True)
+
+    # -------------------------------
+    # 公共方法 (均为类方法)
+    # -------------------------------
+
+    @classmethod
+    def set_param(cls, key: str, value):
+        """设置全局参数"""
+        cls._ensure_connection()
+        if not cls._r:
+            print("Redis 未连接, 无法设置参数!")
+            return
+        with cls._lock:
+            try:
+                cls._r.set(key, json.dumps(value))
+            except Exception as e:
+                print(f"Redis 参数设置失败: {e}")
+
+    @classmethod
+    def get_param(cls, key: str, default=None):
+        """获取全局参数"""
+        cls._ensure_connection()
+        if not cls._r:
+            print("Redis 未连接, 返回默认值!")
+            return default
         try:
-            val = _r.get(key)
+            val = cls._r.get(key)
             return json.loads(val) if val is not None else default
         except Exception as e:
-            print(f"[global_param] 获取参数失败: {e}")
+            print(f"Redis 参数获取失败: {e}")
             return default
 
-    def delete_param(self, key: str):
+    @classmethod
+    def delete_param(cls, key: str):
         """删除参数"""
+        cls._ensure_connection()
+        if not cls._r:
+            print("Redis 未连接, 无法删除参数!")
+            return
         try:
-            _r.delete(key)
+            cls._r.delete(key)
         except Exception as e:
-            print(f"[global_param] 删除参数失败: {e}")
+            print(f"Redis 参数删除失败: {e}")
 
-    def list_params(self, prefix: str = ""):
-        """
-        列出所有参数（可按前缀过滤）
-        例如: list_params('robot_') → {'robot_speed': 1.5, 'robot_mode': 'auto'}
-        """
+    @classmethod
+    def list_params(cls, prefix: str = ""):
+        """列出所有参数（可按前缀过滤）"""
+        cls._ensure_connection()
+        if not cls._r:
+            print("Redis 未连接, 无法列出参数!")
+            return {}
         try:
-            keys = _r.keys(f"{prefix}*")
-            params = {k: json.loads(_r.get(k)) for k in keys}
-            return params
+            keys = cls._r.keys(f"{prefix}*")
+            return {k: json.loads(cls._r.get(k)) for k in keys}
         except Exception as e:
-            print(f"[global_param] 列出参数失败: {e}")
+            print(f"Redis 参数列出失败: {e}")
             return {}
