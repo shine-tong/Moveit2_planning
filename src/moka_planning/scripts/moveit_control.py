@@ -15,7 +15,7 @@ class MoveIt2Py:
     def __init__(self):
         rclpy.init()
         self.logger = rclpy.logging.get_logger("moveit_py.pose_goal")
-        
+
         # ompl配置文件路径
         self.path = __file__.split('scripts/moveit_control.py')[0]+'config/ompl_planning.yaml'
         print(f"ompl config path: {self.path}")
@@ -86,7 +86,7 @@ class MoveIt2Py:
         self.arm.set_goal_state(configuration_name = "home")
         
         self.plan_and_execute(self.moka, self.arm, self.logger)
-  
+        
     # 运动到随机位姿
     def move_to_random(self):
         # 使用当前机器人模型实例化 RobotState 实例
