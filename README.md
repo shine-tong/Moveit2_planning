@@ -20,9 +20,13 @@ src/
 │   │   ├── moveit_control.py
 │   │   ├── welding_pose.py
 │   │   ├── welding_sequence.py
+│   │   ├── command.py
+│   │   ├── launch_plan.py
+│   │   ├── check_joint_limits.py
 │   │   └── pointcloud_publisher.py
 │   ├── utils/               # 工具目录
 │   │   ├── __init__.py
+│   │   ├── execution_timer.py
 │   │   └── redis_param.py
 │   └── package.xml
 ├── mr12_moveit_config/      # MoveIt2 配置包
@@ -53,7 +57,7 @@ src/
 └── mr12urdf20240605/        # 机器人描述包
     ├── config/              # 配置文件
     ├── launch/              # 启动文件
-    ├── meshes/              # 3D网格文件
+    ├── meshes/              # 3D 网格文件
     │   ├── Link1.STL
     │   ├── Link2.STL
     │   ├── Link3.STL
@@ -99,7 +103,7 @@ src/
 ### 核心框架
 - **ROS2 (Robot Operating System 2)**: 机器人操作系统框架
 - **MoveIt2**: 运动规划框架
-- **Ament CMake**: ROS2 构建系统
+- **Ament Python**: ROS2 构建系统
 
 ### 编程语言
 - **Python3**: 主要编程语言
@@ -120,6 +124,7 @@ src/
 - `joint_state_publisher`: 关节状态发布器
 - `robot_state_publisher`: 机器人状态发布器
 - `tf2_ros`: 坐标变换库
+- `tf_transformations`: 三维空间坐标变换和四元数运算
 
 #### 可视化与仿真
 - `rviz2`: 3D 可视化工具
@@ -166,10 +171,11 @@ sudo apt install ros-Jazzy-moveit*
 sudo apt install ros-Jazzy-joint-state-publisher-gui \
                  ros-Jazzy-xacro \
                  ros-Jazzy-controller-manager \
-                 ros-Jazzy-warehouse-ros-mongo
+                 ros-Jazzy-warehouse-ros-mongo \
+                 ros-jazzy-tf-transformations 
 ```
 
-4. **安装 Python 依赖**
+4. **安装 Python3 依赖**
 ```bash
 pip3 install open3d redis
 ```
@@ -195,19 +201,9 @@ source install/setup.bash
 ros2 launch mr12_moveit_config demo.launch.py
 ```
 
-#### 2. 启动运动控制节点
+#### 2. 启动规划节点
 ```bash
-ros2 run moka_planning moveit_control.py
-```
-
-#### 3. 启动点云发布器
-```bash
-ros2 run moka_planning pointcloud_publisher.py
-```
-
-#### 4. 可视化机器人模型
-```bash
-ros2 launch mr12urdf20240605 display.launch.py
+ros2 run moka_planning launch_plan.py
 ```
 
 ## 机器人规格

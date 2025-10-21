@@ -5,6 +5,7 @@ install/
 test/
 log/
 logs/
+moveit_logs/
 data/
 bin/
 lib/
