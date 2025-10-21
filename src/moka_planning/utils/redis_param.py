@@ -126,3 +126,18 @@ class RedisParam:
         except Exception as e:
             print(f"Redis 参数列出失败: {e}")
             return {}
+    
+    @classmethod    
+    def pub_plan_result(cls, result_dict):
+        """发布路径规划结果"""
+        cls._ensure_connection()
+        
+        if not cls._r:
+            print('Redis 未连接，无法发布规划结果!')
+            return
+        try:
+            message = json.dumps(result_dict, ensure_ascii=False)
+            cls._r.publish('ros_plan_result', message)
+            print('规划结果已成功发布!')
+        except Exception as e:
+            print(f'规划结果发布失败：{e}!')
