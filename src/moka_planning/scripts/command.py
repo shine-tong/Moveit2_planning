@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 import os
-import rclpy
 import subprocess
-import threading
 import datetime
 import signal
 
@@ -22,7 +20,7 @@ def launch_rviz_background():
     """
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     
-    with open(f'/home/tong/colcon_ws/logs/moveit_log_{timestamp}.txt', 'w') as log_file:
+    with open(f'/home/tong/colcon_ws/moveit_logs/moveit_log_{timestamp}.txt', 'w') as log_file:
         process = subprocess.Popen(
             ['ros2', 'launch', 'mr12_moveit_config', 'demo.launch.py'],
             stdout=log_file, stderr=subprocess.STDOUT

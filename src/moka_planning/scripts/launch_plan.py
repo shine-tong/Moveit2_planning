@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 import os
-import sys
 import time
-import termios
 import rclpy
-import subprocess
-import threading
 import multiprocessing
 import numpy as np
 import actionlib_msgs.msg._goal_status_array
@@ -23,7 +19,7 @@ from welding_pose import GetQuaternion
 class LaunchPlan(Node):
     def __init__(self):
         super().__init__('launch_plan_node')
-        self.get_logger().info(f'LaunchPlan node started.')
+        self.get_logger().info('LaunchPlan node started.')
         
         # 启动MoveIt2仿真环境和Rviz可视化界面
         command.launch_rviz()
@@ -73,7 +69,7 @@ class LaunchPlan(Node):
             if ok:
                 return message
             else:
-                self.get_logger().info(f'超时内未收到消息！')
+                self.get_logger().info('超时内未收到消息！')
                 return None
         except ROSInterruptException as e:
             self.get_logger().info(f'等待话题 {topic_name} 时程序被中断: {e}.')
@@ -88,7 +84,7 @@ class LaunchPlan(Node):
         
         # 等待服务可用
         if not clear_octomap_client.wait_for_service(timeout_sec=3.0):
-            self.get_logger().info(f'clear_octomap 服务不可用, 跳过操作.')
+            self.get_logger().info('clear_octomap 服务不可用, 跳过操作.')
             return False
         
         req = Empty.Request()
@@ -96,10 +92,10 @@ class LaunchPlan(Node):
             future = clear_octomap_client.call_async(req)   # 使用异步调用请求服务
             rclpy.spin_until_future_complete(self, future)
             if future.result() is not None:
-                self.get_logger().info(f'Octomap has been cleared.')
+                self.get_logger().info('Octomap has been cleared.')
                 return True
             else:
-                self.get_logger().info(f'Service returned None result.')
+                self.get_logger().info('Service returned None result.')
                 return False
         except Exception as e:
             self.get_logger().info(f'Unexpected error while calling /clear_octomap: {e}.')
@@ -115,7 +111,7 @@ class LaunchPlan(Node):
         if os.path.exists(file_path_points):
             result = True
         else:
-            self.get_logger().info(f'焊缝数据不存在，请选择焊缝...')
+            self.get_logger().info('焊缝数据不存在，请选择焊缝...')
             result = False
             
         return result

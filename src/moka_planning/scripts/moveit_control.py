@@ -2,12 +2,10 @@
 import rclpy
 from moveit.planning import MoveItPy
 from moveit.core.robot_state import RobotState
-from rclpy.logging import get_logger
-from moveit.planning import MultiPipelinePlanRequestParameters
 from moveit_configs_utils import MoveItConfigsBuilder
 import yaml
 from geometry_msgs.msg import PoseStamped
-from moveit.core.kinematic_constraints import construct_joint_constraint, construct_link_constraint
+from moveit.core.kinematic_constraints import construct_joint_constraint
 
 # MoveitPy规划类
 class MoveIt2Py:

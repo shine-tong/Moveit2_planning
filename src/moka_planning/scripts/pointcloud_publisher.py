@@ -5,9 +5,7 @@ import rclpy
 from rclpy.node import Node
 import numpy as np
 import open3d as o3d
-import struct
 from scipy.spatial.transform import Rotation as R
-from scipy.spatial import cKDTree
 
 from sensor_msgs.msg import PointCloud2
 from sensor_msgs.msg import PointField
@@ -160,7 +158,7 @@ class PointCloudPublisher(Node):
         self.publisher_ = self.create_publisher(PointCloud2, '/pointcloud/output', 10)
         timer_period = 1.0
         self.timer = self.create_timer(timer_period, self.timer_callback)
-        self.get_logger().info(f'点云发布节点启动...')
+        self.get_logger().info('点云发布节点启动...')
 
 
     def timer_callback(self):

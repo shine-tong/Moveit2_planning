@@ -76,7 +76,10 @@ class RedisParam:
 
     @classmethod
     def set_param(cls, key: str, value):
-        """设置全局参数"""
+        """
+        设置全局参数
+        将传入的数据统一转换为str类型
+        """
         cls._ensure_connection()
         if not cls._r:
             print("Redis 未连接, 无法设置参数!")
@@ -89,7 +92,10 @@ class RedisParam:
 
     @classmethod
     def get_param(cls, key: str, default=None):
-        """获取全局参数"""
+        """
+        获取全局参数
+        获取的参数类型取决于该参数的原始输入类型
+        """
         cls._ensure_connection()
         if not cls._r:
             print("Redis 未连接, 返回默认值!")

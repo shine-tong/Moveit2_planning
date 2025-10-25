@@ -1,5 +1,4 @@
 import os
-import rclpy
 import numpy as np
 
 from math import acos, degrees
@@ -170,9 +169,9 @@ def run():
 
     # 获取文件路径
     file_path = rdsp.get_param('folder_path')
-    file_path_pointcloud = os.path.join(file_path, 'pointcloud.txt')
+    # file_path_pointcloud = os.path.join(file_path, 'pointcloud.txt')
     file_path_points = os.path.join(file_path, 'points.txt')
-    file_path_result = os.path.join(file_path, 'result.txt')
+    # file_path_result = os.path.join(file_path, 'result.txt')
     file_path_points_plan = os.path.join(file_path, 'points_plan.txt')
 
     data_horizontal, data_vertical, data = get_weld(file_path_points)

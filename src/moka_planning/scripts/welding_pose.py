@@ -1,8 +1,5 @@
 import os
-import rclpy
 import numpy as np
-import open3d as o3d
-import tf.transformations as tft 
 
 from scipy.spatial.transform import Rotation as R
 from scipy.spatial import KDTree
@@ -351,6 +348,7 @@ class GetQuaternion:
 
         if all_distance_less_than_5:
             random_index = np.random.randint(0, data_shu.shape[0])
+            vector1 = data_shu[random_index] - self.midpoint
             vector1 /= np.linalg.norm(vector1)    # 单位化vector1，向量除以其模长
             fa_xian = np.cross(vector1, self.weld)  # 计算叉积，得到法向量
             fa_xian /= np.linalg.norm(fa_xian)    # 单位化法向量
@@ -493,13 +491,13 @@ class GetQuaternion:
             ##偏转##
             corner_of_start_point = corner_angle_discrimination(self.start_point, self.data, self.fangxiang)
             corner_of_end_point = corner_angle_discrimination(self.end_point, self.data, self.fangxiang)
-            pi4_pz = atan(1 / (sqrt(2) * tan(np.pi/4))) # CL公式 54.74deg 
+            # pi4_pz = atan(1 / (sqrt(2) * tan(np.pi/4))) # CL公式 54.74deg 
             pi6_pz = atan(1 / (sqrt(2) * tan(np.pi/3))) # CL公式 67.5deg
             yaw_rate1 = 10
             len_hanfeng = np.linalg.norm(self.weld)
             transition_length = 1.5 * len_hanfeng
             # pi6_pz = np.pi/3
-            yaw_pz = atan(1 / (sqrt(2) * tan(self.yaw)))
+            # yaw_pz = atan(1 / (sqrt(2) * tan(self.yaw)))
             if corner_of_start_point:
                 q1 = set_yaw_angle(self.R_mat, pi6_pz)
                 if not corner_of_end_point:

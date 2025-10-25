@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-import sys
-
-from tf_transformations import euler_from_quaternion, quaternion_from_euler, quaternion_multiply
 
 # 检查关节限位
 def check_joint_limits(joint_trajectory):
