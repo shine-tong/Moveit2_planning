@@ -4,7 +4,7 @@ import numpy as np
 from scipy.spatial.transform import Rotation as R
 from scipy.spatial import KDTree
 from math import acos, tan, atan, degrees, sqrt
-from moka_planning.utils.redis_param import RedisParam as rdsp
+from moka_utils.redis_param import RedisParam as rdsp
 
 def corner_angle_discrimination(point, data, direction):
     """

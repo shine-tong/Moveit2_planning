@@ -5,7 +5,6 @@ import rclpy
 from rclpy.node import Node
 import numpy as np
 import open3d as o3d
-from scipy.spatial.transform import Rotation as R
 
 from sensor_msgs.msg import PointCloud2
 from sensor_msgs.msg import PointField

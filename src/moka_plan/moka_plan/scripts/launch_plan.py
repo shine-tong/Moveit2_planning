@@ -12,7 +12,7 @@ from moveit_msgs.msg import PlanningScene
 from rclpy.exceptions import ROSInterruptException
 from std_srvs.srv import Empty
 from rclpy.node import Node
-from moka_planning.utils.redis_param import RedisParam as rdsp
+from moka_utils.redis_param import RedisParam as rdsp
 from welding_pose import GetQuaternion
 
 

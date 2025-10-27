@@ -2,7 +2,7 @@ import os
 import numpy as np
 
 from math import acos, degrees
-from moka_planning.utils.redis_param import RedisParam as rdsp
+from moka_utils.redis_param import RedisParam as rdsp
 
 def calculate_distance(point1, point2):
     """
