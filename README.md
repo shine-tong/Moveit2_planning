@@ -2,50 +2,51 @@
 
 ## 项目概述
 
+**写在前面：项目正在开发中...**  
 本项目是一个基于 ROS2 的 MR12 六自由度机械臂运动规划与控制系统，集成了 MoveIt2 运动规划框架，提供完整的机器人建模、运动规划、轨迹控制和点云处理功能。
 
 ## 项目结构
 
 ```
 src/
-├── moka_interface/          # 自定义消息接口包
-│   ├── msg/                 # 消息定义文件
-│   │   ├── JointTrajectoryEx.msg
-│   │   └── JointTrajectoryPointEx.msg
+├── moka_interface/      # 自定义消息接口包
+│   ├── msg/                    # 消息定义文件
+│   │   ├── JointTrajectoryEx.msg       # trajectory_msgs.msg：JointTrajectory 类型消息
+│   │   └── JointTrajectoryPointEx.msg  # trajectory_msgs.msg：JointTrajectoryPoint 类型消息
 │   └── package.xml
-├── moka_planning/           # 运动规划功能包
-│   ├── config/              # 配置文件
+├── moka_plan/           # 运动规划功能包
+│   ├── config/                 # 配置文件
 │   │   └── ompl_planning.yaml
-│   ├── scripts/             # Python 脚本
-│   │   ├── moveit_control.py
-│   │   ├── welding_pose.py
-│   │   ├── welding_sequence.py
-│   │   ├── command.py
-│   │   ├── launch_plan.py
-│   │   ├── check_joint_limits.py
-│   │   └── pointcloud_publisher.py
-│   ├── utils/               # 工具目录
+│   ├── scripts/                # Python 模块
+│   │   ├── moveit_control.py       # MoveItPy 路径规划模块
+│   │   ├── welding_pose.py         # 姿态计算模块
+│   │   ├── welding_sequence.py     # 规划顺序计算模块
+│   │   ├── command.py              # 指令模块
+│   │   ├── launch_plan.py          # 启动模块
+│   │   ├── check_joint_limits.py   # 检查关节翻转模块
+│   │   └── pointcloud_publisher.py # 点云信息发布模块
+│   ├── utils/           # 工具包
 │   │   ├── __init__.py
-│   │   ├── execution_timer.py
-│   │   └── redis_param.py
+│   │   ├── execution_timer.py      # 计算函数执行时间工具
+│   │   └── redis_param.py          # Redis 全局参数服务器工具
 │   └── package.xml
-├── mr12_moveit_config/      # MoveIt2 配置包
-│   ├── config/              # MoveIt2 配置文件
-│   │   ├── chomp_planning.yaml
-│   │   ├── initial_positions.yaml
-│   │   ├── joint_limits.yaml
-│   │   ├── kinematics.yaml
-│   │   ├── moveit.rviz
-│   │   ├── moveit_controllers.yaml
+├── mr12_moveit_config/  # MoveIt2 配置包
+│   ├── config/                 # MoveIt2 配置文件
+│   │   ├── chomp_planning.yaml     # chomp 配置文件
+│   │   ├── initial_positions.yaml  # 初始点配置文件
+│   │   ├── joint_limits.yaml       # 机器人关节限位文件
+│   │   ├── kinematics.yaml         # 逆运动学求解器配置文件
+│   │   ├── moveit.rviz             # rviz 可视化配置文件
+│   │   ├── moveit_controllers.yaml # moveit2 控制器配置文件
 │   │   ├── mr12urdf20240605.ros2_control.xacro
-│   │   ├── mr12urdf20240605.srdf
+│   │   ├── mr12urdf20240605.srdf   # 机器人模型配置文件
 │   │   ├── mr12urdf20240605.urdf.xacro
-│   │   ├── ompl_planning.yaml
+│   │   ├── ompl_planning.yaml      # ompl 配置文件
 │   │   ├── pilz_cartesian_limits.yaml
-│   │   ├── ros2_controllers.yaml
-│   │   └── sensors_3d.yaml
-│   ├── launch/              # 启动文件
-│   │   ├── demo.launch.py
+│   │   ├── ros2_controllers.yaml   # ros2 控制器配置文件
+│   │   └── sensors_3d.yaml         # octomap 配置文件
+│   ├── launch/           # ROS2 启动文件
+│   │   ├── demo.launch.py          # 启动 MoveIt2 规划环境 
 │   │   ├── move_group.launch.py
 │   │   ├── moveit_rviz.launch.py
 │   │   ├── rsp.launch.py
@@ -54,7 +55,7 @@ src/
 │   │   ├── static_virtual_joint_tfs.launch.py
 │   │   └── warehouse_db.launch.py
 │   └── package.xml
-└── mr12urdf20240605/        # 机器人描述包
+└── mr12urdf20240605/     # 机器人描述包
     ├── config/              # 配置文件
     ├── launch/              # 启动文件
     ├── meshes/              # 3D 网格文件
@@ -81,11 +82,12 @@ src/
 
 ### 2. 运动规划与控制
 - **MoveIt2 集成**: 基于MoveIt2 框架的运动规划系统
-- **多种规划算法**: 支持 OMPL、CHOMP、Pilz 等多种路径规划算法
+- **规划算法**: 目前只支持 OMPL 路径规划算法
 - **轨迹执行**: 完整的轨迹生成和执行功能
 - **关节空间规划**: 支持关节角度目标的运动规划
 - **笛卡尔空间规划**: 支持末端执行器位姿目标的运动规划
-- **随机运动**: 生成随机有效配置的运动功能
+- **随机关节运动**: 支持生成随机有效配置的运动功能
+- **指定配置点运动**: 支持运动到 srdf 配置点的运动功能
 
 ### 3. 点云处理与感知
 - **点云发布**: 实时点云数据发布功能
@@ -157,7 +159,6 @@ src/
 1. **安装 ROS2 Jazzy**
 ```bash
 # 按照官方文档安装ROS2 Jazzy
-sudo apt update
 sudo apt install ros-Jazzy-desktop
 ```
 
@@ -177,7 +178,7 @@ sudo apt install ros-Jazzy-joint-state-publisher-gui \
 
 4. **安装 Python3 依赖**
 ```bash
-pip3 install open3d redis
+pip3 install open3d redis -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 5. **配置 redis**
@@ -196,67 +197,29 @@ source install/setup.bash
 
 ### 使用方法
 
-#### 1. 启动 MoveIt2 规划环境
 ```bash
-ros2 launch mr12_moveit_config demo.launch.py
+ros2 launch moka_plan plan.launch.py
 ```
-
-#### 2. 启动规划节点
-```bash
-ros2 run moka_planning launch_plan.py
-```
-
-## 机器人规格
-
-### MR12 机械臂参数
-- **自由度**: 6DOF
-- **关节类型**: 全旋转关节
-- **工作空间**: 基于关节限制的球形工作空间
-- **关节限制**:
-  - Joint 1: -2.878 ~ 2.878 rad
-  - Joint 2-6: 具体限制见配置文件
-- **最大速度**: 3.541 rad/s (Joint 1)
-- **控制精度**: 高精度位置控制
-
-### 预设姿态
-- **Home 位置**: 所有关节角度为 0 的初始姿态
-- **Test 位置**: Joint1=0.2rad 的测试姿态
-
-## 开发与扩展
-
-### 添加新的运动规划功能
-1. 在`moka_planning/scripts/moveit_control.py`中添加新的运动函数
-2. 配置相应的规划参数
-3. 测试和验证功能
-
-### 自定义消息类型
-1. 在`moka_interface/msg/`目录下添加新的 .msg 文件
-2. 更新`package.xml`和`CMakeLists.txt`
-3. 重新构建工作空间
-
-### 修改机器人模型
-1. 更新 URDF 文件中的几何和物理参数
-2. 重新生成 MoveIt2 配置
-3. 更新碰撞检测和运动学配置
 
 ## 许可证
 
 - `moka_interface`: Apache-2.0
-- `moka_planning`: Apache-2.0
+- `moka_plan`: Apache-2.0
+- `moka_utils`: Apache-2.0
 - `mr12_moveit_config`: BSD
-- `mr12urdf20240605`: 待定义
+- `mr12urdf20240605`: BSD
 
 ## 贡献者
 
-- **维护者**: tong (tongry@123.com)
-- **作者**: try (try@123.com)
+- **维护者**: shine-tong ([shine-tong](https://github.com/shine-tong))
+- **作者**: shine-tong ([shine-tong](https://github.com/shine-tong))
 - **原始开发**: ragesh (ragesh.ramachandran@ipa.fraunhofer.de)
 
 ## 支持与反馈
 
 如有问题或建议，请通过以下方式联系：
-- 邮箱: tongry@123.com
+- Github: https://github.com/shine-tong
 
 ---
 
-*本项目基于 ROS2 和 MoveIt2 框架开发，旨在提供完整的机械臂运动规划与控制解决方案。*
+*本项目基于 ROS2 和 MoveIt2 框架开发.*

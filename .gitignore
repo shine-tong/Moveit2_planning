@@ -326,3 +326,4 @@ _Pvt_Extensions
 *.env
 *.catkin_workspace
 *.zip
+test_api.py
