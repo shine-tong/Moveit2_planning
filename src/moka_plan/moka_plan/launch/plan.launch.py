@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
-
 from launch import LaunchDescription
 from launch_ros.actions import Node
 
 def generate_launch_description():
-    # 启动脚本的绝对路径
-    script_path = '/home/tong/colcon_ws/src/moka_planning/scripts/launch_plan.py'
-    
     return LaunchDescription([
         Node(
-            package='moka_planning',
-            executable=script_path,
-            name='launch_plan_node',
+            package='moka_plan',      # 包名
+            executable='launch_plan_node',   # setup.py 中 console_scripts 注册的名字
+            name='launch_plan_node',         # 节点名
             output='screen',
-            emulate_tty=True
+            emulate_tty=True,         # 让彩色日志正常显示（可选）
         )
     ])

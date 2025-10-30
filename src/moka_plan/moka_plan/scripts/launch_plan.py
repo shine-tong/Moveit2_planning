@@ -206,8 +206,8 @@ class LaunchPlan(Node):
                 command.close_rviz()
                 exit(0)
                 
-def run():
-    rclpy.init(args=None)
+def main(args=None):
+    rclpy.init(args=args)
     node = LaunchPlan()
     
     try:
@@ -221,6 +221,3 @@ def run():
         node.destroy_node()
         rclpy.shutdown()
         print('LaunchPlan 节点已安全退出.')
-        
-if __name__ == "__mian__":
-    run()

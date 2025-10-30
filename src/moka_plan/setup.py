@@ -10,12 +10,13 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        ('share/' + package_name + '/launch', ['launch/plan.launch.py'])
     ],
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='tong',
     maintainer_email='tong166159@163.com',
-    description='TODO: Package description',
+    description='Motion planning module for ROS2 and MoveIt2',
     license='Apace-2.0',
     extras_require={
         'test': [
@@ -24,6 +25,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'launch_plan_node = moka_plan.scripts.launch_plan:main', 
         ],
     },
 )
