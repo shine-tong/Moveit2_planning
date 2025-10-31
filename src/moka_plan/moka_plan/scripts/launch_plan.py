@@ -23,6 +23,7 @@ class LaunchPlan(Node):
         
         # 启动MoveIt2仿真环境和Rviz可视化界面
         command.launch_rviz()
+        command.load_weld_visual_background()
         
         # 初始化相关参数
         self.waited_once = False
