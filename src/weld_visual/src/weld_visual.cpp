@@ -6,10 +6,6 @@
 #include <rclcpp/rclcpp.hpp>
 #include <geometry_msgs/msg/pose.hpp>
 #include <moveit_visual_tools/moveit_visual_tools.h>
-// #include <moveit_msgs/msg/display_robot_state.hpp>
-// #include <moveit_msgs/msg/display_trajectory.hpp>
-// #include <moveit_msgs/msg/attached_collision_object.hpp>
-// #include <moveit_msgs/msg/collision_object.hpp>
 
 using namespace std;
 
