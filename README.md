@@ -30,6 +30,10 @@ src/
 │   │   ├── execution_timer.py      # 计算函数执行时间工具
 │   │   └── redis_param.py          # Redis 全局参数服务器工具
 │   └── package.xml
+├── moka_utils/          # 相关工具功能包
+│   ├── __init__.py   
+│   ├── execution_timer.py       # 计算函数执行时间工具
+│   ├── redis_param.py           # Redis 全局参数服务器工具    
 ├── mr12_moveit_config/  # MoveIt2 配置包
 │   ├── config/                 # MoveIt2 配置文件
 │   │   ├── chomp_planning.yaml     # chomp 配置文件
@@ -55,21 +59,27 @@ src/
 │   │   ├── static_virtual_joint_tfs.launch.py
 │   │   └── warehouse_db.launch.py
 │   └── package.xml
-└── mr12urdf20240605/     # 机器人描述包
-    ├── config/              # 配置文件
-    ├── launch/              # 启动文件
-    ├── meshes/              # 3D 网格文件
-    │   ├── Link1.STL
-    │   ├── Link2.STL
-    │   ├── Link3.STL
-    │   ├── Link4.STL
-    │   ├── Link5.STL
-    │   ├── Link6.STL
-    │   └── base_link.STL
-    ├── rviz/                # RViz 配置文件
-    └── urdf/                # URDF 机器人描述文件
-        ├── mr12urdf20240605.csv
-        └── mr12urdf20240605.urdf
+├── mr12urdf20240605/     # 机器人描述包
+│   ├── config/              # 配置文件
+│   ├── launch/              # 启动文件
+│   ├── meshes/              # 3D 网格文件
+│   │   ├── Link1.STL
+│   │   ├── Link2.STL
+│   │   ├── Link3.STL
+│   │   ├── Link4.STL
+│   │   ├── Link5.STL
+│   │   ├── Link6.STL
+│   │   └── base_link.STL
+│   ├── rviz/                # RViz 配置文件
+│   └── urdf/                # URDF 机器人描述文件
+│       ├── mr12urdf20240605.csv
+│       └── mr12urdf20240605.urdf
+└── weld_visual/     # 规划路径显示功能包
+    ├── include/             # 头文件目录
+    ├── src/                 # 源文件目录
+    │   ├── weld_visual.cpp     # 规划路径显示  
+    ├── CMakeLists.txt    
+    └── package.xml
 ```
 
 ## 主要功能
@@ -88,6 +98,7 @@ src/
 - **笛卡尔空间规划**: 支持末端执行器位姿目标的运动规划
 - **随机关节运动**: 支持生成随机有效配置的运动功能
 - **指定配置点运动**: 支持运动到 srdf 配置点的运动功能
+- **规划路径显示**: 支持显示规划路径位置和姿态功能
 
 ### 3. 点云处理与感知
 - **点云发布**: 实时点云数据发布功能
@@ -105,7 +116,8 @@ src/
 ### 核心框架
 - **ROS2 (Robot Operating System 2)**: 机器人操作系统框架
 - **MoveIt2**: 运动规划框架
-- **Ament Python**: ROS2 构建系统
+- **Ament Python**: ROS2 Python 构建系统
+- **Ament Cmake**: ROS2 C++ 构建系统
 
 ### 编程语言
 - **Python3**: 主要编程语言
@@ -132,6 +144,7 @@ src/
 - `rviz2`: 3D 可视化工具
 - `rviz_common`: RViz 通用组件
 - `rviz_default_plugins`: RViz 默认插件
+- `moveit_rviz_tools`: RViz 显示插件
 
 #### 点云处理
 - `Open3D`: 3D 数据处理库
@@ -145,6 +158,8 @@ src/
 - `rclpy`: ROS2 Python 客户端库
 - `rclcpp`: ROS2 C++ 客户端库
 - `redis`: redis 通信服务
+- `rosbridge`: 提供基于 WebSocket 的 ROS 通信接口
+- `tf2_web_republisher`: 将 ROS 的 TF 坐标变换实时发布为 WebSocket 数据
 
 ## 安装与使用
 
@@ -173,7 +188,9 @@ sudo apt install ros-Jazzy-joint-state-publisher-gui \
                  ros-Jazzy-xacro \
                  ros-Jazzy-controller-manager \
                  ros-Jazzy-warehouse-ros-mongo \
-                 ros-jazzy-tf-transformations 
+                 ros-jazzy-tf-transformations \
+                 ros-jazzy-rosbridge-server \
+                 ros-jazzy-tf2-web-republisher 
 ```
 
 4. **安装 Python3 依赖**
@@ -208,6 +225,7 @@ ros2 launch moka_plan plan.launch.py
 - `moka_utils`: Apache-2.0
 - `mr12_moveit_config`: BSD
 - `mr12urdf20240605`: BSD
+- `weld_visual`: Apache-2.0
 
 ## 贡献者
 
